@@ -1,3 +1,6 @@
+import re
+
+
 class Statuses(object):
     choices = []
     list = []
@@ -5,12 +8,13 @@ class Statuses(object):
 
     def __init__(self, choices):
         self.dict = dict(choices)
-        self.list = [value for value, label in choices]
+        self.list = [value for value, name in choices]
         self.choices = choices
 
-        for el in self.list:
-            if not hasattr(self, str(el)):
-                setattr(self, str(el), el)
+        for value in self.list:
+            label = re.sub('[^0-9a-zA-Z]+', '_', value)
+            if not hasattr(self, label):
+                setattr(self, label, value)
 
     def __call__(self, *args, **kwargs):
         return self.list
