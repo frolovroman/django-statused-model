@@ -227,7 +227,7 @@ Note! You can't use this strings as your status values!
 
 Admin
 ~~~~~~~~~~~~~~~~~~
-*StatusedModelAdmin* provide additional admin action with status fields changing for multiple instances. Just replace *django.contribadmin.ModelAdmin* with *StatusedModelAdmin*::
+*StatusedModelAdmin* provide additional admin action with status fields changing for multiple instances. Just replace *django.contrib.admin.ModelAdmin* with *StatusedModelAdmin*::
 
     from statused_model import StatusedModelAdmin
 
