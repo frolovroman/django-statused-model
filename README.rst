@@ -19,17 +19,18 @@ Example of a standard model with status::
         status = models.CharField(max_length=255, choices=EXAMPLE_STATUSES, default=EXAMPLE_STATUSES[0][0])
 
 In common tasks we forced to use list EXAMPLE_STATUSES with indexes, or it's sting values by themselves.
+
 Variant 1::
 
     ExampleModel.objects.filter(status=EXAMPLE_STATUSES[0][0])
-    if example_models_instance.status == EXAMPLE_STATUSES[0][0]: ...
-    example_models_instance.status = EXAMPLE_STATUSES[0][0]
+    if example_instance.status == EXAMPLE_STATUSES[0][0]: ...
+    example_instance.status = EXAMPLE_STATUSES[0][0]
 
 Variant 2::
 
     ExampleModel.objects.filter(status='ready')
-    if example_models_instance.status == 'ready': ...
-    example_models_instance.status = 'ready'
+    if example_instance.status == 'ready': ...
+    example_instance.status = 'ready'
 
 Both this options I don't like. The same case with using module::
 
@@ -49,8 +50,8 @@ Both this options I don't like. The same case with using module::
                                    default=EXAMPLE_STATUSES.ready)
 
     ExampleModel.objects.filter(status=ExampleModel.ready)
-    if example_models_instance.is_ready: ...
-    example_models_instance.set_ready()
+    if example_instance.is_ready: ...
+    example_instance.set_ready()
 
 1. Excluded the possibility to make typo while specifying the status.
 2. You always know what kind of status in the code.
@@ -150,6 +151,8 @@ now ExampleModel class and each it's instance got new attributes:
     >>> example_instance.status
     'ready'
 
+Note! This method does not store the value in the database!
+
 2. Property same as each status::
 
     >>> example_instance.ready
@@ -164,10 +167,10 @@ now ExampleModel class and each it's instance got new attributes:
 
 **Labels:**
 
-If the status contains characters other than numbers and letters, they are replaced by "_"::
+If the status contains characters other than numbers and letters, they will be replaced by "_"::
 
     EXAMPLE_STATUSES = Statuses([
-            ('splited status', _('What now')),
+            ('splited status', _('What now?')),
     ])
 
     >>> example_instance.is_splited_status:
@@ -210,12 +213,12 @@ There is special statuses for values: None and '' - none and empty_string respec
     >>> example_instance.status
     'done'
     >>> example_instance.set_none()
-    >>> type(e.status)
+    >>> type(example_instance.status)
     <class 'NoneType'>
     >>> example_instance.is_none()
     True
-    >>> e.set_empty_string()
-    >>> e.status
+    >>> example_instance.set_empty_string()
+    >>> example_instance.status
     ''
     >>> example_instance.is_empty_string()
     True
@@ -224,10 +227,11 @@ Note! You can't use this strings as your status values!
 
 Admin
 ~~~~~~~~~~~~~~~~~~
-StatusedModelAdmin provide additional action with status fields changing for multiple instances. Just replace *admin.ModelAdmin* with *StatusedModelAdmin*::
+*StatusedModelAdmin* provide additional admin action with status fields changing for multiple instances. Just replace *django.contribadmin.ModelAdmin* with *StatusedModelAdmin*::
 
     from statused_model import StatusedModelAdmin
 
     @admin.register(ExampleModel)
     class ExampleModelAdmin(StatusedModelAdmin):
         ...
+
