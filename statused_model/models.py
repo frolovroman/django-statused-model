@@ -27,7 +27,7 @@ class StatusedModel(models.Model):
 
     def __init__(self, *args, **kwargs):
         if not self._statuses_initialized:
-            self.__class__.set_statuses()
+            self.set_statuses()
             self._statuses_initialized = True
         super(StatusedModel, self).__init__(*args, **kwargs)
 
